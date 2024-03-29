@@ -1,0 +1,16 @@
+.breadcrumb-css {
+    position: fixed;
+    background-color: #fff;
+    width: 100%;
+    z-index: 10;
+}
+
+.mid-content-css {
+    position: relative;
+    top: 110px;
+}
+
+.badge-button{
+    font-size: 15px;
+    margin: 0 90px 0 0 ;
+}
