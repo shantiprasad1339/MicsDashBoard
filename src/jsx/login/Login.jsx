@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import './login.css';
 import logo from './milogo.png';
-
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+axios
 function Login() {
 
     const initialValue = {
@@ -10,6 +12,7 @@ function Login() {
     }
 
     const[login, setLogin] = useState(initialValue);
+    const navigate = useNavigate()
 
     function handleInputField(e){
         setLogin({...login, [e.target.name]:e.target.value})
@@ -19,7 +22,31 @@ function Login() {
         e.preventDefault();
         console.log(login);
     }
+function Login(){
+    const baseUrl = "https://mountinfosys.com/";
+    const endPoint = "admin/login";
+    const logIn = {
+        "email":login.username,
+        "password":login.password
+      }
+    axios.post(baseUrl+endPoint,logIn).then((res)=>{
+        if(res.data.status == 200){
+            const userName = res.data.data._id;
+            const role = res.data.data.role;
 
+
+            localStorage.setItem('user', userName);
+            localStorage.setItem('userRole', role);
+
+            navigate('/home')
+        }else{
+            alert(res.response.data.msg)
+        }
+console.log(res);
+    }).catch((err)=>{
+       alert(err.response.data.msg);
+    })
+}
     return (
         <>
             <div className="container h-100 login-container">
@@ -57,7 +84,7 @@ function Login() {
                                                 <label className='form-label fw-bold'>Password</label>
                                                 <input 
                                                 className="form-control form-control-lg" 
-                                                type="password" 
+                                                type="text" 
                                                 name="password" 
                                                 placeholder="Enter your password"
                                                 value={login.password}
@@ -66,7 +93,7 @@ function Login() {
                                             </div>
 
                                             <div className="text-center mt-4">
-                                                <button type='submit' className="btn btn-lg btn-primary">Sign in</button>
+                                                <button type='' onClick={Login} className="btn btn-lg btn-primary">Sign in</button>
                                             </div>
                                         </form>
                                     </div>

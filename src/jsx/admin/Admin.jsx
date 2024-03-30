@@ -1,93 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import Midbar from '../../dashboard/midbar/Midbar';
 import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
+import axios from "axios";
 
 function Admin() {
-
-    const AdminData = [
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-        {
-            name: 'Mark Voldov',
-            img: "https://bootdey.com/img/Content/avatar/avatar1.png",
-            email: "mvoges@email.com",
-            country: "India",
-            designation: "React Developer",
-            date: "22 Mar, 2024"
-        },
-    ]
-
+    const [AdminData,setAdminList] = useState()
+    const userRole = localStorage.getItem("userRole")
+    function getAdminList() {
+        const baseUrl = "https://mountinfosys.com/";
+        const endPoint = "admin/list";
+        axios.get(baseUrl + endPoint,{headers:{role:userRole}}).then((res) => {
+            setAdminList(res.data.data);
+          console.log(res);
+        });
+      }
+      useEffect(() => {
+        getAdminList();
+      }, []);
+   
     return (
         <>
             <Midbar>
@@ -124,14 +55,14 @@ function Admin() {
                                                     <th>Name</th>
                                                     <th>Email</th>
                                                     <th>Country</th>
-                                                    <th>Designation</th>
+                                                    <th>PhoneNumber</th>
                                                     <th>Role</th>
                                                     <th>Created Date</th>
                                                     <th className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {AdminData.map((item, index) => (
+                                                {AdminData && AdminData.map((item, index) => (
                                                     <tr className="align-middle" key={index}>
                                                         <td>{index + 1}</td>
                                                         <td>
@@ -144,9 +75,9 @@ function Admin() {
                                                         </td>
                                                         <td>{item.email}</td>
                                                         <td> <span className="d-inline-block align-middle">{item.country}</span></td>
-                                                        <td><span>{item.designation}</span></td>
+                                                        <td><span>{item.number}</span></td>
                                                         <td>Admin</td>
-                                                        <td>{item.date}</td>
+                                                        <td>{item.createdAt}</td>
                                                         <td>
                                                             <div className="d-flex justify-content-around">
                                                                 <button className="btn btn-sm btn-outline-success" type="button"> <AdminEditModal /> </button>

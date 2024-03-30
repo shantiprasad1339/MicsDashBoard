@@ -15,14 +15,14 @@ function SetRoute() {
     return ( 
         <>
         <Routes>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={< Login/>} />
             <Route path='/user' element={<User />} />
             <Route path='/user-add' element={<UserAdd />} />
             <Route path='/company' element={<Company />} />
             <Route path='/admin' element={<Admin />} />
             <Route path='/admin-add' element={<AdminAdd />} />
             <Route path='/job-list' element={<JobList />} />
-            <Route path='/login' element={<Login />} />
+            <Route path='/home' element={<Home />} />
             <Route path='/profile' element={<Profile />} />
         </Routes>
         </>
