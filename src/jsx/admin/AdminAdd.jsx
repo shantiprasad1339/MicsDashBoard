@@ -2,8 +2,20 @@ import React, { useState } from "react";
 import "./admin.css";
 import Midbar from "../../dashboard/midbar/Midbar";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 function AdminAdd() {
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <>
       <Midbar>
@@ -56,127 +68,193 @@ function AdminAdd() {
 export default AdminAdd;
 
 const AdminAddBox = () => {
+  const [image, setImage] = useState(null);
+
   const [adminData, setAdminData] = useState({
     name: "",
     email: "",
-    phone: "",
+    number: "",
     password: "",
     role: "",
+    // profilePic:""
   });
-  function addAdmin() {
+  const userRole = localStorage.getItem("userRole")
+
+  function createUser(e) {
+    e.preventDefault();
     const baseUrl = "https://mountinfosys.com/";
     const endPoint = "admin/create";
-    const admin = {};
-    axios.post(baseUrl + endPoint).then((res) => {
+    axios.post(baseUrl + endPoint,adminData,{headers:{role:userRole}}).then((res) => {
       console.log(res);
+      if (res.data.status == 200){
+        setAdminData({
+          name: "",
+          email: "",
+          number: "",
+          password: "",
+          role: "",
+          // profilePic:""
+      });  
+      }
     });
   }
-  function createUser(e){
-    e.preventDefault()
-    console.log(adminData);
-  }
+ 
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+        const fileName = file.name;
+        setAdmin({ ...admin, image: fileName });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  
+
   return (
-    <>
-      <div className="container">
-        <div className="row mt-5">
-          <div className="col-md-2"></div>
-          <div className="col-md-8 user-border">
-            <h2 className="text-center mb-4">Create Admin Form</h2>
-            <form >
-              <div className="col">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInputName"
-                    placeholder="Full Name"
-                    value={adminData.name}
-                    onChange={(e) =>
-                      setAdminData({ ...adminData, name: e.target.value })
-                    }
-                  />
-                  <label htmlFor="floatingInputName">Full Name</label>
-                </div>
-              </div>
-
-              <div className="col">
-                <div className="form-floating mb-3">
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="floatingInput"
-                    placeholder="name@example.com"
-                    value={adminData.email} // Use value instead of placeholder for controlled input
-                    onChange={(e) =>
-                      setAdminData({ ...adminData, email: e.target.value })
-                    }
-                  />
-                  <label htmlFor="floatingInput">Email address</label>
-                </div>
-              </div>
-
-              <div className="col">
-                <div className="form-floating mb-3">
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="floatingInputMobile"
-                    placeholder="Full Name"
-                    value={adminData.number} // Use value instead of placeholder for controlled input
-                    onChange={(e) =>
-                      setAdminData({ ...adminData, number: e.target.value })
-                    }
-                  />
-                  <label htmlFor="floatingInputMobile">Mobile Number</label>
-                </div>
-              </div>
-
-              <div className="col">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-select"
-                    id="floatingSelect"
-                    aria-label="Floating label select example"
-                    value={adminData.role} // Use value instead of placeholder for controlled input
-                    onChange={(e) =>
-                      setAdminData({ ...adminData, role: e.target.value })
-                    }
-                  >
-                    <option>Select</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Manager">Manager</option>
-                    <option value="User">User</option>
-                  </select>
-                  <label htmlFor="floatingSelect">Work Team</label>
-                </div>
-              </div>
-
-              <div className="col">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingPassword"
-                    placeholder="Password"
-                    value={adminData.password} // Use value instead of placeholder for controlled input
-                    onChange={(e) =>
-                      setAdminData({ ...adminData, password: e.target.value })
-                    }
-                  />
-                  <label htmlFor="floatingPassword">Password</label>
-                </div>
-              </div>
-
-              <div className="col text-center">
-                <button type="" className="btn btn-primary" onClick={createUser}>
-                  Add User
-                </button>
-              </div>
-            </form>
+    <div className="container">
+      <div className="row mt-5 d-flex justify-content-center">
+        <div className="col-sm-auto mb-3">
+          <div className="mx-auto" style={{ width: "180px" }}>
+            <div className="col-12">
+              <img
+                src={
+                  image
+                    ? image
+                    : "//static.naukimg.com/s/5/105/i/displayProfilePlaceholder.png"
+                }
+                style={{
+                  width: "140px",
+                  height: "140px",
+                  borderRadius: "50%",
+                  border: "1px solid gray",
+                }}
+                alt="Profile"
+              />
+            </div>
           </div>
-          <div className="col-md-2"></div>
         </div>
       </div>
-    </>
+      <div className="row">
+        <div className="col-md-2"></div>
+        <div className="col-md-8 user-border">
+          <h2 className="text-center mb-4">Create Admin Form</h2>
+          <form >
+            <div className="col">
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  name="name"
+                  value={adminData.name}
+                  onChange={(e) =>
+                    setAdminData({ ...adminData, name: e.target.value })
+                  }
+                  className="form-control"
+                  id="floatingInputName"
+                  placeholder="Full Name"
+                />
+                <label htmlFor="floatingInputName">Full Name</label>
+              </div>
+            </div>
+
+            <div className="col">
+              <div className="form-floating mb-3">
+                <input
+                  type="email"
+                  name="email"
+                  value={adminData.email}
+                  onChange={(e) =>
+                    setAdminData({ ...adminData, email: e.target.value })
+                  }
+                  className="form-control"
+                  id="floatingInput"
+                  placeholder="name@example.com"
+                />
+                <label htmlFor="floatingInput">Email address</label>
+              </div>
+            </div>
+
+            <div className="col">
+              <div className="form-floating mb-3">
+                <input
+                  type="number"
+                  name="mobile"
+                  value={adminData.number}
+                  onChange={(e) =>
+                    setAdminData({ ...adminData, number: e.target.value })
+                  }
+                  className="form-control"
+                  id="floatingInputMobile"
+                  placeholder="Mobile Number"
+                />
+                <label htmlFor="floatingInputMobile">Mobile Number</label>
+              </div>
+            </div>
+
+            <div className="col">
+              <div className="form-floating mb-3">
+                <select
+                  name="team"
+                  value={adminData.role}
+                  onChange={(e) =>
+                    setAdminData({ ...adminData, role: e.target.value })
+                  }
+                  className="form-select"
+                  id="floatingSelect"
+                  aria-label="Floating label select example"
+                >
+                  <option>Select</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Manager">Manager</option>
+                  <option value="User">User</option>
+                </select>
+                <label htmlFor="floatingSelect">Work Team</label>
+              </div>
+            </div>
+
+            <div className="col">
+              <div className="form-floating mb-3">
+                <input
+                  type="password"
+                  name="password"
+                  value={adminData.password}
+                  onChange={(e) =>
+                    setAdminData({ ...adminData, password: e.target.value })
+                  }
+                  className="form-control"
+                  id="floatingPassword"
+                  placeholder="Password"
+                />
+                <label htmlFor="floatingPassword">Password</label>
+              </div>
+            </div>
+
+            <div className="col">
+              <div className="mt-3 mb-3">
+                <input
+                  type="file"
+                  accept="image/*"
+                  // onChange={(e) =>
+                  //   setAdminData({ ...adminData, image: e.target.files[0] })
+                  // }
+                  className="form-control"
+                />
+              </div>
+            </div>
+
+            <div className="col text-center">
+              <button onClick={createUser} className="btn btn-primary">
+                Add User
+              </button>
+            </div>
+          </form>
+        </div>
+        <div className="col-md-2"></div>
+      </div>
+    </div>
   );
 };
