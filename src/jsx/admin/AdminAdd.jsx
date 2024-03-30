@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './admin.css';
 import Midbar from '../../dashboard/midbar/Midbar';
 import { Link } from 'react-router-dom';
 
 function AdminAdd() {
+    const [image, setImage] = useState(null);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
     return (
         <>
             <Midbar>
@@ -37,64 +49,116 @@ function AdminAdd() {
 
 export default AdminAdd;
 
+
+
 const AdminAddBox = () => {
+    const [image, setImage] = useState(null);
+
+    const initialValue = {
+        name: "",
+        email: "",
+        mobile: "",
+        team: "",
+        password: "",
+        image: "",
+    }
+
+    const [admin, setAdmin] = useState(initialValue);
+
+    const handleInputField = (e) => {
+        const { name, value } = e.target;
+        setAdmin({ ...admin, [name]: value });
+    }
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result);
+                const fileName = file.name;
+                setAdmin({ ...admin, image: fileName });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
+    
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Admin Data:", admin);
+    };
+
     return (
-        <>
-            <div className="container">
-                <div className="row mt-5">
-                    <div className="col-md-2"></div>
-                    <div className="col-md-8 user-border">
-                        <h2 className='text-center mb-4'>Create Admin Form</h2>
-                        <form>
-                            <div className="col">
-                                <div className="form-floating mb-3">
-                                    <input type="text" className="form-control" id="floatingInputName" placeholder="Full Name" />
-                                    <label htmlFor="floatingInputName">Full Name</label>
-                                </div>
-                            </div>
-
-                            <div className="col">
-                                <div className="form-floating mb-3">
-                                    <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
-                                    <label htmlFor="floatingInput">Email address</label>
-                                </div>
-                            </div>
-
-                            <div className="col">
-                                <div className="form-floating mb-3">
-                                    <input type="number" className="form-control" id="floatingInputMobile" placeholder="Full Name" />
-                                    <label htmlFor="floatingInputMobile">Mobile Number</label>
-                                </div>
-                            </div>
-
-                            <div className="col">
-                                <div className="form-floating mb-3">
-                                    <select className="form-select" id="floatingSelect" aria-label="Floating label select example">
-                                        <option>Select</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="Manager">Manager</option>
-                                        <option value="User">User</option>
-                                    </select>
-                                    <label htmlFor="floatingSelect">Work Team</label>
-                                </div>
-                            </div>
-
-                            <div className="col">
-                                <div className="form-floating mb-3">
-                                    <input type="text" className="form-control" id="floatingPassword" placeholder="Password" />
-                                    <label htmlFor="floatingPassword">Password</label>
-                                </div>
-                            </div>
-
-                            <div className="col text-center">
-                                <button type="submit" className='btn btn-primary'>Add User</button>
-                            </div>
-                        </form>
+        <div className="container">
+            <div className="row mt-5 d-flex justify-content-center">
+                <div className="col-sm-auto mb-3">
+                    <div className="mx-auto" style={{ width: "180px" }}>
+                        <div className="col-12">
+                            <img src={image ? image : "//static.naukimg.com/s/5/105/i/displayProfilePlaceholder.png"} style={{ width: "140px", height: "140px", borderRadius: "50%", border:"1px solid gray" }} alt="Profile" />
+                        </div>
                     </div>
-                    <div className="col-md-2"></div>
                 </div>
             </div>
+            <div className="row">
+                <div className="col-md-2"></div>
+                <div className="col-md-8 user-border">
+                    <h2 className='text-center mb-4'>Create Admin Form</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="col">
+                            <div className="form-floating mb-3">
+                                <input type="text" name="name" value={admin.name} onChange={handleInputField} className="form-control" id="floatingInputName" placeholder="Full Name" />
+                                <label htmlFor="floatingInputName">Full Name</label>
+                            </div>
+                        </div>
 
-        </>
-    )
-}
+                        <div className="col">
+                            <div className="form-floating mb-3">
+                                <input type="email" name="email" value={admin.email} onChange={handleInputField} className="form-control" id="floatingInput" placeholder="name@example.com" />
+                                <label htmlFor="floatingInput">Email address</label>
+                            </div>
+                        </div>
+
+                        <div className="col">
+                            <div className="form-floating mb-3">
+                                <input type="number" name="mobile" value={admin.mobile} onChange={handleInputField} className="form-control" id="floatingInputMobile" placeholder="Mobile Number" />
+                                <label htmlFor="floatingInputMobile">Mobile Number</label>
+                            </div>
+                        </div>
+
+                        <div className="col">
+                            <div className="form-floating mb-3">
+                                <select name="team" value={admin.team} onChange={handleInputField} className="form-select" id="floatingSelect" aria-label="Floating label select example">
+                                    <option>Select</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="User">User</option>
+                                </select>
+                                <label htmlFor="floatingSelect">Work Team</label>
+                            </div>
+                        </div>
+
+                        <div className="col">
+                            <div className="form-floating mb-3">
+                                <input type="password" name="password" value={admin.password} onChange={handleInputField} className="form-control" id="floatingPassword" placeholder="Password" />
+                                <label htmlFor="floatingPassword">Password</label>
+                            </div>
+                        </div>
+
+                        <div className="col">
+                            <div className="mt-3 mb-3">
+                                <input type="file" accept="image/*" onChange={handleImageChange} className='form-control' />
+                            </div>
+                        </div>
+
+                        <div className="col text-center">
+                            <button type="submit" className='btn btn-primary'>Add User</button>
+                        </div>
+                    </form>
+                </div>
+                <div className="col-md-2"></div>
+            </div>
+        </div>
+    );
+};
