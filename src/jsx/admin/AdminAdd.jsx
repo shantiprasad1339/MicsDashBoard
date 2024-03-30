@@ -86,15 +86,9 @@ const AdminAddBox = () => {
     const endPoint = "admin/create";
     axios.post(baseUrl + endPoint,adminData,{headers:{role:userRole}}).then((res) => {
       console.log(res);
-      if (res.data.status == 200){
-        setAdminData({
-          name: "",
-          email: "",
-          number: "",
-          password: "",
-          role: "",
-          // profilePic:""
-      });  
+      if (res.data.status == true){
+       alert(adminData.role+" Added")
+            window.location.reload()
       }
     });
   }
