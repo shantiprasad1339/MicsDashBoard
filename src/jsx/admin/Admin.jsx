@@ -170,7 +170,7 @@ export default Admin;
 
 function AdminEditModal({item}) {
   const [show, setShow] = useState(false);
-
+const [userData,setUserData] = useState(item)
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 function updateAdmin(e){
@@ -180,7 +180,22 @@ function updateAdmin(e){
 
       const baseUrl = "https://mountinfosys.com/";
       const endPoint = "admin/update/";
-    axios.put(baseUrl+endPoint+userId,{ headers: { role: userRole }}).then((res)=>{console.log(res);})
+      const data = {
+        name:userData.name,
+        email:userData.email,
+        number:userData.number,
+        password:userData.password,
+        role:userData.role,
+        // image:userData.email
+
+
+
+      }
+    axios.put(baseUrl+endPoint+userId,data,{ headers: { role: userRole }}).then((res)=>{console.log(res);
+    if (res.data.status == true){
+        setShow(false)
+    }
+    })
 }
   return (
     <>
@@ -202,8 +217,11 @@ function updateAdmin(e){
                         type="text"
                         className="form-control"
                         id="floatingInputName"
-                        value={item.name}
+                        value={userData.name}
                         placeholder="Full Name"
+                        onChange={(e) =>
+                            setUserData({ ...userData, name: e.target.value })
+                          }
                       />
                       <label htmlFor="floatingInputName">Full Name</label>
                     </div>
@@ -215,7 +233,10 @@ function updateAdmin(e){
                         type="email"
                         className="form-control"
                         id="floatingInput"
-                        value={item.email}
+                        value={userData.email}
+                        onChange={(e) =>
+                            setUserData({ ...userData, email: e.target.value })
+                          }
                         placeholder="name@example.com"
                       />
                       <label htmlFor="floatingInput">Email address</label>
@@ -228,7 +249,10 @@ function updateAdmin(e){
                         type="number"
                         className="form-control"
                         id="floatingInputMobile"
-                        value={item.number}
+                        value={userData.number}
+                        onChange={(e) =>
+                            setUserData({ ...userData, number: e.target.value })
+                          }
                         placeholder="Full Name"
                       />
                       <label htmlFor="floatingInputMobile">Mobile Number</label>
@@ -241,6 +265,9 @@ function updateAdmin(e){
                         className="form-select"
                         id="floatingSelect"
                         aria-label="Floating label select example"
+                        onChange={(e) =>
+                            setUserData({ ...userData, role: e.target.value })
+                          }
                       >
                         <option>Select</option>
                         <option value="Admin">Admin</option>
@@ -257,6 +284,9 @@ function updateAdmin(e){
                         type="text"
                         className="form-control"
                         id="floatingPassword"
+                        onChange={(e) =>
+                            setUserData({ ...userData, password: e.target.value })
+                          }
                         placeholder="Password"
                       />
                       <label htmlFor="floatingPassword">Password</label>
