@@ -119,7 +119,7 @@ function Admin() {
                                     type="button"
                                   >
                                     {" "}
-                                    <AdminEditModal item={item}/>{" "}
+                                    <AdminEditModal item={item} />{" "}
                                   </button>
                                   {/* <button className="btn btn-sm btn-outline-danger " type="button"><i className="bi bi-trash"></i></button> */}
                                 </div>
@@ -168,20 +168,42 @@ function Admin() {
 
 export default Admin;
 
-function AdminEditModal({item}) {
+
+
+function AdminEditModal({ item }) {
   const [show, setShow] = useState(false);
+
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-function updateAdmin(e){
+
+  const [image, setImage] = useState(null);
+
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+        const fileName = file.name;
+        setAdmin({ ...admin, image: fileName });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
+
+  function updateAdmin(e) {
     e.preventDefault()
     const userRole = localStorage.getItem("userRole");
     const userId = localStorage.getItem("user");
 
-      const baseUrl = "https://mountinfosys.com/";
-      const endPoint = "admin/update/";
-    axios.put(baseUrl+endPoint+userId,{ headers: { role: userRole }}).then((res)=>{console.log(res);})
-}
+    const baseUrl = "https://mountinfosys.com/";
+    const endPoint = "admin/update/";
+    axios.put(baseUrl + endPoint + userId, { headers: { role: userRole } }).then((res) => { console.log(res); })
+  }
   return (
     <>
       <span onClick={handleShow}>Edit</span>
@@ -195,6 +217,30 @@ function updateAdmin(e){
             <div className="row mb-4">
               <div className="col-md-12">
                 <h3 className="text-center mb-4">Update Admin </h3>
+
+                <div className="row mt-1 d-flex justify-content-center">
+                  <div className="col-sm-auto mb-3">
+                    <div className="mx-auto" style={{ width: "180px" }}>
+                      <div className="col-12">
+                        <img
+                          src={
+                            image
+                              ? image
+                              : "//static.naukimg.com/s/5/105/i/displayProfilePlaceholder.png"
+                          }
+                          style={{
+                            width: "140px",
+                            height: "140px",
+                            borderRadius: "50%",
+                            border: "1px solid gray",
+                          }}
+                          alt="Profile"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <form>
                   <div className="col">
                     <div className="form-floating mb-3">
@@ -260,6 +306,12 @@ function updateAdmin(e){
                         placeholder="Password"
                       />
                       <label htmlFor="floatingPassword">Password</label>
+                    </div>
+                  </div>
+
+                  <div className="col">
+                    <div className="mt-3 mb-3">
+                      <input type="file" accept="image/*" onChange={handleImageChange} className='form-control' />
                     </div>
                   </div>
 
