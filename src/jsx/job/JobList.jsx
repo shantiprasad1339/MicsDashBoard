@@ -7,6 +7,7 @@ import JobDetails from "./JobDetails";
 import axios from "axios";
 function JobList() {
   const [Jobs, setJobs] = useState();
+  let userId = localStorage.getItem("user");
 
   function getJobList() {
     const baseUrl = "https://mountinfosys.com/";
@@ -40,7 +41,7 @@ function JobList() {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb ms-3">
               <li className="breadcrumb-item">
-                <Link to="/">
+                <Link to={`/home/${userId}`}>
                   {" "}
                   <b> Home </b>
                 </Link>

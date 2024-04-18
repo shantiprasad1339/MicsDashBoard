@@ -9,6 +9,7 @@ function Company() {
   const baseUrl = "https://mountinfosys.com/";
   const endPoint = "company/list";
   const [Companies, setCompanies] = useState();
+  let userId = localStorage.getItem("user");
 
   function getUserList() {
     axios.get(baseUrl + endPoint).then((res) => {
@@ -41,7 +42,7 @@ function Company() {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb ms-3">
               <li className="breadcrumb-item">
-                <Link to="/">
+                <Link to={`/home/${userId}`}>
                   {" "}
                   <b> Home </b>
                 </Link>

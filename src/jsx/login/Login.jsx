@@ -38,7 +38,7 @@ function Login(){
             localStorage.setItem('user', userName);
             localStorage.setItem('userRole', role);
 
-            navigate('/home')
+            navigate('/home/userName')
         }else{
             alert(res.response.data.msg)
         }

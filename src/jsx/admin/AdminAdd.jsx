@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 function AdminAdd() {
   const [image, setImage] = useState(null);
+  let userId = localStorage.getItem("user");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -38,7 +39,7 @@ function AdminAdd() {
             <nav aria-label="breadcrumb">
               <ol className="breadcrumb ms-3">
                 <li className="breadcrumb-item">
-                  <Link to="/">
+                  <Link to={`/home/${userId}`}>
                     {" "}
                     <b> Home </b>
                   </Link>
@@ -76,19 +77,29 @@ const AdminAddBox = () => {
     number: "",
     password: "",
     role: "",
-    // profilePic:""
+    city:"",
+    profilePic:""
   });
   const userRole = localStorage.getItem("userRole")
 
   function createUser(e) {
     e.preventDefault();
+    console.log(adminData);
+    const addUserData = new FormData()
+    addUserData.append('name', adminData.name);
+    addUserData.append('email', adminData.email);
+    addUserData.append('number', adminData.number);
+    addUserData.append('password', adminData.password);
+    addUserData.append('role', adminData.role);
+    addUserData.append('city', adminData.city);
+    addUserData.append('profilePic', adminData.profilePic);
     const baseUrl = "https://mountinfosys.com/";
     const endPoint = "admin/create";
-    axios.post(baseUrl + endPoint,adminData,{headers:{role:userRole}}).then((res) => {
+    axios.post(baseUrl + endPoint,addUserData,{headers:{role:userRole}}).then((res) => {
       console.log(res);
       if (res.data.status == true){
        alert(adminData.role+" Added")
-            window.location.reload()
+            // window.location.reload()
       }
     });
   }
@@ -96,6 +107,8 @@ const AdminAddBox = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    setAdminData({ ...adminData, profilePic: e.target.files[0] })
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -188,7 +201,22 @@ const AdminAddBox = () => {
                 <label htmlFor="floatingInputMobile">Mobile Number</label>
               </div>
             </div>
-
+            <div className="col">
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  name="city"
+                  value={adminData.city}
+                  onChange={(e) =>
+                    setAdminData({ ...adminData, city: e.target.value })
+                  }
+                  className="form-control"
+                 
+                  placeholder="city"
+                />
+                <label htmlFor="floatingPassword">City</label>
+              </div>
+            </div>
             <div className="col">
               <div className="form-floating mb-3">
                 <select
@@ -226,15 +254,16 @@ const AdminAddBox = () => {
                 <label htmlFor="floatingPassword">Password</label>
               </div>
             </div>
+           
 
             <div className="col">
               <div className="mt-3 mb-3">
                 <input
                   type="file"
                   accept="image/*"
-                  // onChange={(e) =>
-                  //   setAdminData({ ...adminData, image: e.target.files[0] })
-                  // }
+                  onChange={
+                    handleImageChange
+                  }
                   className="form-control"
                 />
               </div>

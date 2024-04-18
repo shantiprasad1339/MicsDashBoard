@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Midbar from "../../dashboard/midbar/Midbar";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import axios from "axios";
 
 function Profile() {
   const [image, setImage] = useState(null);
+  const [imageUrl,setImageUrl] = useState(null)
   const [userData,setUserData] = useState(null)
   const baseUrl = "https://mountinfosys.com/";
   const endPoint = "admin/profile/";
@@ -13,6 +14,7 @@ function Profile() {
     axios.get(baseUrl + endPoint + userId).then((res) => {
       console.log(res);
       setUserData(res.data.data)
+      setImage(baseUrl+res.data.data.profilePic)
     });
   }
   useEffect(() => {
@@ -20,6 +22,7 @@ function Profile() {
   }, []);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    setImageUrl(file)
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -28,11 +31,7 @@ function Profile() {
       reader.readAsDataURL(file);
     }
   };
-
-  const handleSubmit = () => {
-    console.log("Image submitted:", image);
-  };
-
+  console.log(image);
   return (
     <>
       <Midbar>
@@ -53,7 +52,7 @@ function Profile() {
             <nav aria-label="breadcrumb">
               <ol className="breadcrumb ms-3">
                 <li className="breadcrumb-item">
-                  <Link to="/">
+                  <Link to={`/home/${userId}`}>
                     {" "}
                     <b> Home </b>
                   </Link>
@@ -78,12 +77,8 @@ function Profile() {
                           <div className="col-12 col-sm-auto mb-3">
                             <div className="mx-auto" style={{ width: "180px" }}>
                               <div className="col-4">
-                                <img
-                                  src={
-                                    image
-                                      ? image
-                                      : "//static.naukimg.com/s/5/105/i/displayProfilePlaceholder.png"
-                                  }
+                              <img
+                                  src={image}
                                   style={{
                                     width: "140px",
                                     height: "140px",
@@ -91,6 +86,7 @@ function Profile() {
                                   }}
                                   alt="Profile"
                                 />
+                               
                               </div>
                               <div className="mt-3">
                                 <input
@@ -101,7 +97,7 @@ function Profile() {
                                 />
                               </div>
                               <div className="mt-3">
-                                {image ? (
+                                {/* {image ? (
                                   <button
                                     className="btn btn-success me-2"
                                     onClick={handleSubmit}
@@ -110,7 +106,7 @@ function Profile() {
                                   </button>
                                 ) : (
                                   <></>
-                                )}
+                                )} */}
                               </div>
                             </div>
                           </div>
@@ -120,14 +116,14 @@ function Profile() {
                               <h4 className="pt-sm-2 pb-1 mb-0 text-nowrap">
                                 MICS ADMIN
                               </h4>
-                               
+                                  
                             </div>
                             <div className="text-center">
                               <span className="badge text-bg-primary fs-6">
                                 Admin
                               </span>
                               <div className="text-muted">
-                                <small>Joined 22 Mar 2024</small>
+                                {/* <small>{userData.createdAt}</small> */}
                               </div>
                             </div>
                           </div>
@@ -139,9 +135,9 @@ function Profile() {
                           <div className="tab-pane active">
                             <div className="row">
                               <div className="col">
-                         {userData && <UpdateProfile data={userData}/>}       
+                         {userData && <UpdateProfile data={userData} imageUrl={imageUrl}/>}       
 
-                                <ChangePassword />
+                               
                               </div>
                             </div>
                           </div>
@@ -156,17 +152,19 @@ function Profile() {
         </section>
       </Midbar>
     </>
-  );
+  ); 
 }
 
 export default Profile;
 
-function UpdateProfile({data}) {
+function UpdateProfile({data,imageUrl}) {
  
   const [profile, setProfile] = useState(data);
   const baseUrl = "https://mountinfosys.com/";
-  const endPoint = "admin/profile/";
+  const endPoint = "admin/update/";
   let userId = localStorage.getItem("user");
+  let role = localStorage.getItem("userRole");
+const navigate = useNavigate()
 
   function handleInputField(e) {
     setProfile({ ...profile, [e.target.name]: e.target.value });
@@ -174,18 +172,50 @@ function UpdateProfile({data}) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(profile);
   }
-console.log(profile);
 
 
 
-function updateProfile(){
+function updateProfile(e){
+  e.preventDefault()
+  console.log(profile,imageUrl);
+
     const profileData = {
-
+      profilePic:imageUrl,
+password:profile.password,
+name:profile.name,
+email:profile.email,
+number:profile.number,
+role:profile.role
     }
-    axios.put(baseUrl+endPoint+profileData).then((res)=>{
+    const updateProfile = new FormData();
+
+    // Append profilePic
+    updateProfile.append('profilePic', profileData.profilePic);
+    
+    // Append password
+    updateProfile.append('password', profileData.password);
+    
+    // Append name
+    updateProfile.append('name', profileData.name);
+    
+    // Append email
+    updateProfile.append('email', profileData.email);
+    
+    // Append number
+    updateProfile.append('number', profileData.number);
+    
+    // Append role
+    updateProfile.append('role', profileData.role);
+
+
+
+    axios.put(baseUrl+endPoint+ userId,updateProfile,{headers:{role:role}}).then((res)=>{
         console.log(res);
+        if(res.data.message == "update successfully"){
+          alert('Profile Updated')
+          navigate(`/home/${userId}`);
+        }
     })
 }
   return (
@@ -272,122 +302,56 @@ function updateProfile(){
             </div>
           </div> */}
 
-          <div className="col d-flex justify-content-end mt-3">
-            <button className="btn btn-success" type="" onClick={updateProfile}>
-              Update Profile
-            </button>
-          </div>
+          
         </div>
 
 
       
       </form>
-    </>
-  );
-}
-
-function ChangePassword() {
-  const initialValue = {
-    newPassword: "",
-    confirmPassword: "",
-  };
-
-  const [password, setPassword] = useState(initialValue);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
-  useEffect(() => {
-    if (error || success) {
-      const timer = setTimeout(() => {
-        setError("");
-        setSuccess("");
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [error, success]);
-
-  function handleInputField(e) {
-    setPassword({ ...password, [e.target.name]: e.target.value });
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (password.newPassword === password.confirmPassword) {
-      console.log("Passwords match. Submitting...");
-      setSuccess("Password changed successfully!");
-      setPassword(initialValue);
-      setError("");
-    } else {
-      setError("Passwords do not match. Please try again.");
-      setSuccess("");
-    }
-  }
-
-  return (
-    <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={''}>
         <div className="row mt-5">
           <div className="mb-2 fs-5">
             <b>Change Password</b>
           </div>
 
-          {error && (
-            <div className="row">
-              <div className="col">
-                <div className="alert alert-danger" role="alert">
-                  {error}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {success && (
-            <div className="row">
-              <div className="col">
-                <div className="alert alert-success" role="alert">
-                  {success}
-                </div>
-              </div>
-            </div>
-          )}
+        
+         
 
           <div className="col-12 col-sm-6 mt-3">
             <div className="form-group">
               <label className="form-label fw-bold">New Password</label>
               <input
                 className="form-control"
-                type="password"
-                name="newPassword"
-                value={password.newPassword}
+                type="text"
+                name="password"
+                
                 onChange={handleInputField}
                 required
               />
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 mt-3">
+          {/* <div className="col-12 col-sm-6 mt-3">
             <div className="form-group">
               <label className="form-label fw-bold">Confirm Password</label>
               <input
                 className="form-control"
                 type="password"
                 name="confirmPassword"
-                value={password.confirmPassword}
-                onChange={handleInputField}
+               
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="row mt-4">
           <div className="col d-flex justify-content-end">
-            <button className="btn btn-success" type="submit">
-              Change Password
+          <button className="btn btn-success" type="" onClick={updateProfile}>
+              Update Profile
             </button>
           </div>
         </div>
-      </form>
-    </>
+      </form>    </>
   );
 }
+

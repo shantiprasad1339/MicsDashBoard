@@ -9,7 +9,7 @@ import UserAdd from '../user/UserAdd';
 import AdminAdd from '../admin/AdminAdd';
 import Login from '../login/Login';
 import Profile from '../profile/Profile';
-
+import Hrlist from '../user/Hrlist';
 
 function SetRoute() {
     return ( 
@@ -17,13 +17,15 @@ function SetRoute() {
         <Routes>
             <Route path='/' element={< Login/>} />
             <Route path='/user' element={<User />} />
-            <Route path='/user-add' element={<UserAdd />} />
-            <Route path='/company' element={<Company />} />
-            <Route path='/admin' element={<Admin />} />
+            <Route path='/hrlist' element={<Hrlist />} />
+
+            <Route path='/user-add/:uId' element={<AdminAdd />} />
+            <Route path='/company/:uId' element={<Company />} />
+            <Route path='/admin/:uId' element={<Admin />} />
             <Route path='/admin-add' element={<AdminAdd />} />
-            <Route path='/job-list' element={<JobList />} />
-            <Route path='/home' element={<Home />} />
-            <Route path='/profile' element={<Profile />} />
+            <Route path='/job-list/:uId' element={<JobList />} />
+            <Route path='/home/:uId' element={<Home />} />
+            <Route path='/profile/:uId' element={<Profile />} />
         </Routes>
         </>
      );

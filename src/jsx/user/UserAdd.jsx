@@ -4,6 +4,8 @@ import Midbar from '../../dashboard/midbar/Midbar';
 import { Link } from 'react-router-dom';
 
 function UserAdd() {
+    let userId = localStorage.getItem("user");
+
     return (
         <>
             <Midbar>
@@ -19,7 +21,7 @@ function UserAdd() {
                     <div className='d-flex justify-content-between'>
                         <nav aria-label="breadcrumb">
                             <ol className="breadcrumb ms-3">
-                                <li className="breadcrumb-item"><Link to="/"> <b> Home </b></Link></li>
+                                <li className="breadcrumb-item"><Link to={`/home/${userId}`}> <b> Home </b></Link></li>
                                 <li className="breadcrumb-item active" aria-current="page"><b>User Add</b></li>
                             </ol>
                         </nav>
@@ -84,7 +86,18 @@ const UserAddBox = () => {
                                     <label htmlFor="floatingPassword">Password</label>
                                 </div>
                             </div>
-
+                            <div className="col">
+                                <div className="form-floating mb-3">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={''}
+                                  className="form-control"
+                                />
+                                    <label htmlFor="floatingPassword">Password</label>
+                                </div>
+                            </div>
+                           
                             <div className="col text-center">
                                 <button type="submit" className='btn btn-primary'>Add User</button>
                             </div>

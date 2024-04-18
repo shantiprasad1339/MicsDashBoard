@@ -83,49 +83,52 @@ function Admin() {
                       </thead>
                       <tbody>
                         {AdminData &&
-                          AdminData.map((item, index) => (
-                            <tr className="align-middle" key={index}>
-                              <td>{index + 1}</td>
-                              <td>
-                                <div className="d-flex align-items-center">
-                                  <img
-                                    src={item.img}
-                                    className="avatar sm rounded-pill me-3 flex-shrink-0"
-                                    alt="Customer"
-                                  />
-                                  <div>
-                                    <div className="h6 mb-0 lh-1">
-                                      {item.name}
+                          AdminData.map((item, index) => {
+                            const baseUrl = "https://mountinfosys.com/";
+                            return (
+                              <tr className="align-middle" key={index}>
+                                <td>{index + 1}</td>
+                                <td>
+                                  <div className="d-flex align-items-center">
+                                    <img
+                                      src={baseUrl + item.profilePic}
+                                      className="avatar sm rounded-pill me-3 flex-shrink-0"
+                                      alt="Customer"
+                                    />
+                                    <div>
+                                      <div className="h6 mb-0 lh-1">
+                                        {item.name}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </td>
-                              <td>{item.email}</td>
-                              <td>
-                                {" "}
-                                <span className="d-inline-block align-middle">
-                                  {item.country}
-                                </span>
-                              </td>
-                              <td>
-                                <span>{item.number}</span>
-                              </td>
-                              <td>Admin</td>
-                              <td>{item.createdAt}</td>
-                              <td>
-                                <div className="d-flex justify-content-around">
-                                  <button
-                                    className="btn btn-sm btn-outline-success"
-                                    type="button"
-                                  >
-                                    {" "}
-                                    <AdminEditModal item={item} />{" "}
-                                  </button>
-                                  {/* <button className="btn btn-sm btn-outline-danger " type="button"><i className="bi bi-trash"></i></button> */}
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
+                                </td>
+                                <td>{item.email}</td>
+                                <td>
+                                  {" "}
+                                  <span className="d-inline-block align-middle">
+                                    {item.country}
+                                  </span>
+                                </td>
+                                <td>
+                                  <span>{item.number}</span>
+                                </td>
+                                <td>Admin</td>
+                                <td>{item.createdAt}</td>
+                                <td>
+                                  <div className="d-flex justify-content-around">
+                                    <button
+                                      className="btn btn-sm btn-outline-success"
+                                      type="button"
+                                    >
+                                      {" "}
+                                      <AdminEditModal item={item} />{" "}
+                                    </button>
+                                    {/* <button className="btn btn-sm btn-outline-danger " type="button"><i className="bi bi-trash"></i></button> */}
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
                       </tbody>
                     </table>
                   </div>
@@ -168,22 +171,19 @@ function Admin() {
 
 export default Admin;
 
-
-
 function AdminEditModal({ item }) {
   const [show, setShow] = useState(false);
-  const [userData,setUserData] = useState(item)
-const [imageFile,setImg] = useState()
+  const [userData, setUserData] = useState(item);
+  const [imageFile, setImg] = useState();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const [image, setImage] = useState(null);
 
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImg(file)
+    setImg(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -194,40 +194,31 @@ const [imageFile,setImg] = useState()
     }
   };
 
-
-
   function updateAdmin(e) {
-    e.preventDefault()
+    e.preventDefault();
     const userRole = localStorage.getItem("userRole");
     const userId = localStorage.getItem("user");
-    const baseUrl = "https://mountinfosys.com/";
+    const baseUrl = "https://mountinfosys.com/"; 
     const endPoint = "admin/update/";
     const data = {
-        name:userData.name,
-        email:userData.email,
-        number:userData.number,
-        password:userData.password,
-        role:userData.role,
-        image:imageFile
-        
-        
-        
-    }
+      name: userData.name,
+      email: userData.email,
+      number: userData.number,
+      password: userData.password,
+      role: userData.role,
+      image: imageFile, 
+      city: userData.city, 
+    };
     console.log(data);
-    axios.put(baseUrl+endPoint+userId,data,{ headers: { role: userRole }}).then((res)=>{console.log(res);
-    if (res.data.status == true){
-        setShow(false)
-        window.location.reload()
-    }
-    })
+    axios
+      .put(baseUrl + endPoint + userId, data, { headers: { role: userRole } })
+      .then((res) => {
+        console.log(res);
+        if (res.data.status == true) {
+       window.location.reload( )
+        }
+      });
   }
-
-
-
-
-
-
-  
 
   return (
     <>
@@ -276,8 +267,8 @@ const [imageFile,setImg] = useState()
                         value={userData.name}
                         placeholder="Full Name"
                         onChange={(e) =>
-                            setUserData({ ...userData, name: e.target.value })
-                          }
+                          setUserData({ ...userData, name: e.target.value })
+                        }
                       />
                       <label htmlFor="floatingInputName">Full Name</label>
                     </div>
@@ -291,14 +282,28 @@ const [imageFile,setImg] = useState()
                         id="floatingInput"
                         value={userData.email}
                         onChange={(e) =>
-                            setUserData({ ...userData, email: e.target.value })
-                          }
+                          setUserData({ ...userData, email: e.target.value })
+                        }
                         placeholder="name@example.com"
                       />
                       <label htmlFor="floatingInput">Email address</label>
                     </div>
                   </div>
-
+                  <div className="col">
+                    <div className="form-floating mb-3">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="floatingInput"
+                        value={userData.city}
+                        onChange={(e) =>
+                          setUserData({ ...userData, city: e.target.value })
+                        }
+                        placeholder="Enter City Name"
+                      />
+                      <label htmlFor="floatingInput">City</label>
+                    </div>
+                  </div>
                   <div className="col">
                     <div className="form-floating mb-3">
                       <input
@@ -307,8 +312,8 @@ const [imageFile,setImg] = useState()
                         id="floatingInputMobile"
                         value={userData.number}
                         onChange={(e) =>
-                            setUserData({ ...userData, number: e.target.value })
-                          }
+                          setUserData({ ...userData, number: e.target.value })
+                        }
                         placeholder="Full Name"
                       />
                       <label htmlFor="floatingInputMobile">Mobile Number</label>
@@ -322,8 +327,8 @@ const [imageFile,setImg] = useState()
                         id="floatingSelect"
                         aria-label="Floating label select example"
                         onChange={(e) =>
-                            setUserData({ ...userData, role: e.target.value })
-                          }
+                          setUserData({ ...userData, role: e.target.value })
+                        }
                       >
                         <option>Select</option>
                         <option value="Admin">Admin</option>
@@ -334,29 +339,38 @@ const [imageFile,setImg] = useState()
                     </div>
                   </div>
 
-                  <div className="col">
+                  {/* <div className="col">
                     <div className="form-floating mb-3">
                       <input
                         type="text"
                         className="form-control"
                         id="floatingPassword"
                         onChange={(e) =>
-                            setUserData({ ...userData, password: e.target.value })
-                          }
+                          setUserData({ ...userData, password: e.target.value })
+                        }
                         placeholder="Password"
                       />
                       <label htmlFor="floatingPassword">Password</label>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col">
                     <div className="mt-3 mb-3">
-                      <input type="file" accept="image/*" onChange={handleImageChange} className='form-control' />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="form-control"
+                      />
                     </div>
                   </div>
 
                   <div className="col text-center">
-                    <button type="" className="btn btn-primary" onClick={updateAdmin}>
+                    <button
+                      type=""
+                      className="btn btn-primary"
+                      onClick={updateAdmin}
+                    >
                       Update Admin
                     </button>
                   </div>

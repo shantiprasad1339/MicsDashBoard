@@ -10,11 +10,12 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate, } from 'react-router-dom';
 
 function Header() {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+    let userId = localStorage.getItem("user");
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -22,7 +23,10 @@ function Header() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
+    const handleLogout = () => {
+        // Clear localStorage
+        localStorage.clear();
+      };
     return (
         <>
             <div style={{ position: "fixed", top: "5px", right: "10px", zIndex: "999" }}>
@@ -90,7 +94,7 @@ function Header() {
                             <ListItemIcon>
                                 <Logout fontSize="small" />
                             </ListItemIcon>
-                            Logout
+                            <Link to="/" onClick={handleLogout}>Logout</Link>
                         </MenuItem>
                     </Menu>
                 </React.Fragment>
