@@ -90,8 +90,8 @@ table th {
     background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
 }
 .modal img{
-    /* width: 500px; */
-    height: 600px;
+    width: 600px;
+    height: 500px;
 }
 /* Modal Content (Image) */
 .modal-content {
@@ -99,6 +99,7 @@ table th {
     display: block;
     width: 100%;
     max-width: 700px;
+    margin-top: 80px;
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
@@ -132,7 +133,7 @@ table th {
 }
 
 /* The Close Button */
-.close {
+/* .close {
     position: absolute;
     top: 15px;
     right: 35px;
@@ -147,7 +148,7 @@ table th {
     color: #bbb;
     text-decoration: none;
     cursor: pointer;
-}
+} */
 
 /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 700px){
