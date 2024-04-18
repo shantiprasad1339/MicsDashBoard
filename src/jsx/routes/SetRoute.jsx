@@ -10,6 +10,7 @@ import AdminAdd from '../admin/AdminAdd';
 import Login from '../login/Login';
 import Profile from '../profile/Profile';
 import Hrlist from '../user/Hrlist';
+import Example from '../example/Example';
 
 function SetRoute() {
     return ( 
@@ -26,6 +27,9 @@ function SetRoute() {
             <Route path='/job-list/:uId' element={<JobList />} />
             <Route path='/home/:uId' element={<Home />} />
             <Route path='/profile/:uId' element={<Profile />} />
+
+            <Route path='/example' element={<Example />} />
+
         </Routes>
         </>
      );

@@ -86,6 +86,17 @@ const[userId,setUserId] = useState(UID)
                             <li><NavLink className="link_name" to={`/job-list/${userId}`}>Job List</NavLink></li>
                         </ul>
                     </li>
+
+                    <li>
+                    <NavLink to='/example'>
+                            <i className='bi bi-view-list'></i>
+                            <span className="link_name">Example</span>
+                        </NavLink>
+                        <ul className="sub-menu blank">
+                            <li><NavLink className="link_name" to='/example'>Exmaple</NavLink></li>
+                        </ul>
+                    </li>
+
                     <li>
                     <NavLink to={`/profile/${userId}`}>
 
