@@ -102,10 +102,10 @@ const[userId,setUserId] = useState(UID)
                     <li>
                     <NavLink to='/example'>
                             <i className='bi bi-view-list'></i>
-                            <span className="link_name">Example</span>
+                            <span className="link_name">HR Positions</span>
                         </NavLink>
                         <ul className="sub-menu blank">
-                            <li><NavLink className="link_name" to='/example'>Exmaple</NavLink></li>
+                            <li><NavLink className="link_name" to='/example'>Hr Positions</NavLink></li>
                         </ul>
                     </li>
 
