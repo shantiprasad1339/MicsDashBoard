@@ -88,6 +88,18 @@ const[userId,setUserId] = useState(UID)
                     </li>
 
                     <li>
+                        <NavLink to='/blog'>
+                            <i className='bi bi-substack'></i>
+                            <span className="link_name">Blog</span>
+                        </NavLink>
+                        <ul className="sub-menu">
+                            <li><NavLink className="link_name" >Blog</NavLink></li>
+                            <li><NavLink to='/blog'><i className="bi bi-substack"></i> Blog List</NavLink></li>
+                            <li><NavLink to='/blog-add'><i className="bi bi-patch-plus-fill"></i> Blog Add</NavLink></li>
+                        </ul>
+                    </li>
+
+                    <li>
                     <NavLink to='/example'>
                             <i className='bi bi-view-list'></i>
                             <span className="link_name">Example</span>

@@ -11,6 +11,8 @@ import Login from '../login/Login';
 import Profile from '../profile/Profile';
 import Hrlist from '../user/Hrlist';
 import Example from '../example/Example';
+import Blog from '../blog/Blog';
+import BlogAdd from '../blog/BlogAdd';
 
 function SetRoute() {
     return ( 
@@ -29,6 +31,9 @@ function SetRoute() {
             <Route path='/profile/:uId' element={<Profile />} />
 
             <Route path='/example' element={<Example />} />
+            <Route path='/blog' element={<Blog />} />
+            <Route path='/blog-add' element={<BlogAdd />} />
+
 
         </Routes>
         </>

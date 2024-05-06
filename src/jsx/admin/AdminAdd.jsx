@@ -80,6 +80,7 @@ const AdminAddBox = () => {
     city:"",
     profilePic:""
   });
+  
   const userRole = localStorage.getItem("userRole")
 
   function createUser(e) {
