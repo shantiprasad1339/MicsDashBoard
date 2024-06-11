@@ -96,15 +96,15 @@ const AdminAddBox = () => {
     addUserData.append('profilePic', adminData.profilePic);
     const baseUrl = "https://mountinfosys.com/";
     const endPoint = "admin/create";
-    axios.post(baseUrl + endPoint,addUserData,{headers:{role:userRole}}).then((res) => {
+    axios.post(baseUrl + endPoint,addUserData,{headers:{role:'Admin'}}).then((res) => {
       console.log(res);
       if (res.data.status == true){
        alert(adminData.role+" Added")
-            // window.location.reload()
+            window.location.reload()
       }
     });
   }
- 
+          
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

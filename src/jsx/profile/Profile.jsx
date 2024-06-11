@@ -14,7 +14,7 @@ function Profile() {
     axios.get(baseUrl + endPoint + userId).then((res) => {
       console.log(res);
       setUserData(res.data.data)
-      setImage(baseUrl+res.data.data.profilePic)
+      setImage(res.data.data.profilePic)
     });
   }
   useEffect(() => {

@@ -13,12 +13,13 @@ import Hrlist from '../user/Hrlist';
 import Example from '../example/Example';
 import Blog from '../blog/Blog';
 import BlogAdd from '../blog/BlogAdd';
-
+import OurBrand from '../Our-Brand/OurBrand';
 function SetRoute() {
     return ( 
         <>
         <Routes>
             <Route path='/' element={< Login/>} />
+            <Route path='/brands' element={< OurBrand/>} />
             <Route path='/user' element={<User />} />
             <Route path='/hrlist' element={<Hrlist />} />
 
